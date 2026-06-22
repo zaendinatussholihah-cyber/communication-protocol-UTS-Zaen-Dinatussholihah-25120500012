@@ -1,1 +1,1 @@
-//disini upload aja hasil SS get sama post kemaren
+// disini lu bikin file baru kaya diatas nanti tinggal ganti aja jadi GET_Request1.md nah diisi perintah yang lu pake kemarin, ikutin aja kaya yang punya gua kalo yang di request ini, bedanya di perintahnya aja elu, karena gua kan product kalo elu aapaan tau
