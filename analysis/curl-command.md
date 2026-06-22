@@ -1,68 +1,100 @@
-Curl Commands - Case 1 User/Profile API
+# Curl Commands - Case 1 User/Profile API
 
 Base URL demo app: http://localhost:8088
 
-Jalankan reset data terlebih dahulu:
+Jalankan reset data:
 
+```bash
 curl -X POST http://localhost:8088/api/reset
-1. GET - Daftar User
+```
+
+## 1. GET - Daftar User
+
+```bash
 curl -i -X GET "http://localhost:8088/api/users"
+```
 
 Expected:
+- 200 OK
+- Body berisi `count` dan array `data` (seluruh pengguna).
 
-Status 200 OK
-Body berisi count dan array data yang berisi seluruh user.
-2. GET - Detail User
+---
+
+## 2. GET - Detail User
+
+```bash
 curl -i -X GET "http://localhost:8088/api/users/2"
+```
 
 Expected:
+- 200 OK
+- Body berisi satu object user berdasarkan id.
+- Jika id tidak ditemukan maka `404 Not Found`.
 
-Status 200 OK
-Body berisi satu object user berdasarkan ID.
-Jika ID tidak ditemukan, akan mengembalikan 404 Not Found.
-3. POST - Tambah User (Body Lengkap)
+---
+
+## 3. POST - Tambah User (Body Lengkap)
+
+```bash
 curl -i -X POST "http://localhost:8088/api/users" \
 -H "Content-Type: application/json" \
--d '{"name":"Zaen Dinatussholihah","email":"zaen@gmail.com","username":"zaendina"}'
+-d '{"name":"Zaen Dinatussholihah","email":"zaen@gmail.com","username":"zaen12"}'
+```
 
 Expected:
+- 201 Created
+- Header `Location: /api/users/{id-baru}`
+- Body berisi data user yang berhasil ditambahkan.
 
-Status 201 Created
-Header Location: /api/users/{id-baru}
-Body berisi data user yang baru ditambahkan.
-4. POST - Uji Validasi Input (Body Tidak Lengkap)
+---
+
+## 4. POST - Uji Validasi Input (Body Tidak Lengkap)
+
+```bash
 curl -i -X POST "http://localhost:8088/api/users" \
 -H "Content-Type: application/json" \
 -d '{"name":"Zaen Dinatussholihah"}'
+```
 
 Expected:
+- 400 Bad Request
+- Body:
 
-Status 400 Bad Request
-Body:
+```json
 {
   "error": "Missing required fields",
   "missing": ["email", "username"]
 }
-5. POST - Update Profile User
+```
+
+---
+
+## 5. POST - Update Profile User
+
+```bash
 curl -i -X POST "http://localhost:8088/api/users/1/profile" \
 -H "Content-Type: application/json" \
 -d '{"name":"Zaen D.","email":"zaenbaru@gmail.com"}'
+```
 
 Expected:
+- 200 OK
+- Body berisi data profil yang sudah diperbarui.
 
-Status 200 OK
-Body berisi data profile user yang telah diperbarui.
-6. POST - Update Profile User Tidak Ditemukan
+---
+
+## 6. POST - Update Profile User Tidak Ditemukan
+
+```bash
 curl -i -X POST "http://localhost:8088/api/users/999/profile" \
 -H "Content-Type: application/json" \
 -d '{"name":"Test"}'
+```
 
 Expected:
+- 404 Not Found
 
-404 Not Found
-
-Body:
-
+```json
 {
   "error": "User not found"
 }
