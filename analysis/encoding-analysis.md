@@ -11,6 +11,7 @@ JSON dipilih karena beberapa alasan yang relevan dengan konteks API ini:
 * **Didukung luas** — hampir semua bahasa pemrograman dan HTTP client (termasuk Postman, curl, browser) mendukung parsing JSON secara native.
 * **Cocok untuk data semi-terstruktur** — data user memiliki field dengan tipe data yang beragam (string dan number) yang terwakili langsung dalam JSON.
 
+---
 
 # 2. Struktur Data per Response
 
@@ -42,6 +43,7 @@ JSON dipilih karena beberapa alasan yang relevan dengan konteks API ini:
     }
   ]
 }
+```
 
 **Struktur root** adalah sebuah JSON object dengan dua field:
 
@@ -55,6 +57,8 @@ Setiap object di dalam array memiliki field:
 * `email` (string) — alamat email user.
 * `username` (string) — nama pengguna untuk login.
 
+---
+
 ## 2.2 GET /api/users/{id} — Detail User
 
 **Response body (200 OK):**
@@ -66,10 +70,13 @@ Setiap object di dalam array memiliki field:
   "email": "budi@gmail.com",
   "username": "budi02"
 }
+```
 
 **Struktur root** adalah sebuah object tunggal (bukan array). Field-fieldnya identik dengan satu elemen di dalam `data` pada response daftar.
 
 **Perbedaan dengan response daftar:** Response detail tidak memiliki wrapper `count` dan `data`, karena client sudah menentukan ID user yang ingin diambil.
+
+---
 
 ## 2.3 POST /api/users — Tambah User (body valid)
 
@@ -81,6 +88,7 @@ Setiap object di dalam array memiliki field:
   "email": "zaen@gmail.com",
   "username": "zaen12"
 }
+```
 
 **Response body (201 Created):**
 
@@ -92,6 +100,7 @@ Setiap object di dalam array memiliki field:
   "username": "zaen12",
   "createdAt": "2026-06-22T10:13:58+0000"
 }
+```
 
 **Field tambahan yang muncul di response:**
 
@@ -102,8 +111,11 @@ Setiap object di dalam array memiliki field:
 
 ```http
 Location: /api/users/4
+```
 
 Header ini memberitahu client lokasi resource baru yang berhasil dibuat.
+
+---
 
 ## 2.4 POST /api/users — Uji Validasi Input (body tidak lengkap)
 
@@ -113,6 +125,7 @@ Header ini memberitahu client lokasi resource baru yang berhasil dibuat.
 {
   "name": "Zaen Dinatussholihah"
 }
+```
 
 **Response body (400 Bad Request):**
 
@@ -124,11 +137,14 @@ Header ini memberitahu client lokasi resource baru yang berhasil dibuat.
     "username"
   ]
 }
+```
 
 **Struktur pesan error:**
 
 * `error` (string) — penjelasan singkat mengenai kesalahan.
 * `missing` (array of string) — daftar field yang belum diisi.
+
+---
 
 # 3. Analisis HTTP Method
 
@@ -163,6 +179,8 @@ Status code tambahan:
 * **404 Not Found** — muncul jika `GET /api/users/999`.
 * **500 Internal Server Error** — muncul jika terjadi kesalahan tak terduga di sisi server.
 
+---
+
 # 5. Analisis Header Penting
 
 ### `Content-Type: application/json; charset=utf-8`
@@ -185,6 +203,8 @@ Mengizinkan request dari domain manapun.
 
 Menentukan metode HTTP yang diizinkan server.
 
+---
+
 # 6. Validasi Input & Error Handling
 
 Field yang wajib diisi:
@@ -197,6 +217,7 @@ Jika ada field yang kosong:
 
 ```http
 400 Bad Request
+```
 
 Response:
 
@@ -208,11 +229,13 @@ Response:
     "username"
   ]
 }
+```
 
 Jika user tidak ditemukan:
 
 ```http
 404 Not Found
+```
 
 Response:
 
@@ -220,8 +243,14 @@ Response:
 {
   "error": "User not found"
 }
+```
+
 Format error seperti ini memudahkan client mengetahui penyebab kegagalan request.
+
+---
+
 # 7. Kesimpulan
 
 Berdasarkan pengujian User/Profile API, metode GET digunakan untuk mengambil data pengguna, sedangkan metode POST digunakan untuk menambahkan dan memperbarui data pengguna. Response server menggunakan format JSON sehingga mudah dibaca dan diproses oleh aplikasi.
+
 Status code HTTP membantu pengguna mengetahui apakah request berhasil atau terjadi kesalahan. Header seperti Content-Type dan Location berperan penting dalam proses pertukaran data. Dari praktikum ini dapat dipahami cara kerja komunikasi client-server, penggunaan metode HTTP, struktur response JSON, serta pentingnya analisis protocol dalam pertukaran data.
